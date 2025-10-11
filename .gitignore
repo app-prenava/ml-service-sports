@@ -11,12 +11,6 @@ env/
 *.pkl
 *.joblib
 
-data/
-*.csv
-*.parquet
-*.xlsx
-*.zip
-
 .env
 
 .DS_Store
@@ -33,3 +27,6 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+risk_model_report.json
+
