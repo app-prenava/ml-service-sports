@@ -1,51 +1,48 @@
-## 1. Navigate to the project directory
-cd ml-service-sports
-
-## 2. Create and activate a virtual environment
+#if mac
 python3 -m venv venv
 source venv/bin/activate
-# (On Windows: venv\Scripts\activate)
 
-## 3. Install all dependencies
+#if Windows
+python -m venv venv
+venv\Scripts\Activate.ps1
+
+pip install --upgrade pip
 pip install -r requirements.txt
 
-## 4. (Optional) Retrain the dummy model if `model.pkl` does not exist
-python train.py
+# Train the model
+python train_risk.py
 
-## 5. Start the FastAPI server
+# Run API
 uvicorn app:app --host 0.0.0.0 --port 8080
 
-### Available Endpoints:
-- GET /healthz      → Health check
-- POST /predict     → Get recommendation results
+# Hit Endpoint
+GET http://localhost:8080/healthz
 
-## 6. Test the /healthz endpoint
-curl http://localhost:8080/healthz
-
-## 7. Test the /predict endpoint
 curl -X POST http://localhost:8080/predict \
   -H "Content-Type: application/json" \
   -d '{
-    "age": 29,
-    "gestational_age_weeks": 28,
-    "bmi": 27.3,
-    "pre_pregnancy_activity_level": 1,
-    "hypertension": false,
+    "age": 28,
+    "gestational_age_weeks": 20,
+    "bmi": 26.8,
+    "blood_pressure_systolic": 120,
+    "blood_pressure_diastolic": 80,
+    "blood_sugar": 100,
+    "body_temp": 36.8,
+    "heart_rate": 85,
+    "previous_complications": false,
+    "preexisting_diabetes": false,
     "gestational_diabetes": false,
-    "placenta_previa": false,
-    "pre_eclampsia": false,
+    "mental_health_issue": false,
+    "placenta_position_restriction": false,
     "low_impact_pref": true,
     "water_access": true,
-    "back_pain": true
+    "back_pain": false
   }'
 
-## 8. Edit the rules (optional)
-File location:
-rules.yml
-- You must restart the API after modifying this file.
+# Run With Docker
+docker build -t ml-service-sports .
 
-## 9. Retrain the model (only if needed)
-python train.py
-
-## 10. Stop the server
-Press CTRL + C
+docker run --rm -p 8080:8080 \
+  -v $(pwd)/risk_model.pkl:/app/risk_model.pkl \
+  -v $(pwd)/rules.yml:/app/rules.yml \
+  ml-service-sports
