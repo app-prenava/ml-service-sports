@@ -1,13 +1,45 @@
-absolute_risk:
-  - if: "hypertension and gestational_age_weeks < 28"
-    allow:
-      - walking
+medical_risk_rules:
+  - condition: "placenta_position_restriction == True"
+    ban:
+      - jogging
+      - high_impact_aerobic
+      - jump_rope
+      - pilates_prenatal
+      - strength_heavy
+
+
+  - condition: "previous_complications == True"
+    ban:
+      - high_impact_aerobic
+      - pilates_prenatal
+      - running
+
+preference_rules:
+  - condition: "low_impact_pref == True"
+    boost:
       - prenatal_yoga
       - stretching_gentle
+      - pilates_prenatal
+      - swimming
       - pelvic_floor
 
-relative_risk:
-  - if: "back_pain"
-    prefer:
-      - prenatal_yoga
+  - condition: "water_access == False"
+    lower:
+      - swimming
+      - aqua_cycling
+
+  - condition: "back_pain == True"
+    boost:
       - stretching_gentle
+      - prenatal_yoga
+      - pelvic_floor
+    lower:
+      - strength_heavy
+      - running
+      - jumping
+
+  - condition: "mental_health_issue == True"
+    boost:
+      - prenatal_yoga
+      - breathing_exercise
+      - walking
