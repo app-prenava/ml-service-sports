@@ -1,0 +1,13 @@
+absolute_risk:
+  - if: "hypertension and gestational_age_weeks < 28"
+    allow:
+      - walking
+      - prenatal_yoga
+      - stretching_gentle
+      - pelvic_floor
+
+relative_risk:
+  - if: "back_pain"
+    prefer:
+      - prenatal_yoga
+      - stretching_gentle

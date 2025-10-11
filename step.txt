@@ -1,0 +1,51 @@
+## 1. Navigate to the project directory
+cd ml-service-sports
+
+## 2. Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+# (On Windows: venv\Scripts\activate)
+
+## 3. Install all dependencies
+pip install -r requirements.txt
+
+## 4. (Optional) Retrain the dummy model if `model.pkl` does not exist
+python train.py
+
+## 5. Start the FastAPI server
+uvicorn app:app --host 0.0.0.0 --port 8080
+
+### Available Endpoints:
+- GET /healthz      → Health check
+- POST /predict     → Get recommendation results
+
+## 6. Test the /healthz endpoint
+curl http://localhost:8080/healthz
+
+## 7. Test the /predict endpoint
+curl -X POST http://localhost:8080/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "age": 29,
+    "gestational_age_weeks": 28,
+    "bmi": 27.3,
+    "pre_pregnancy_activity_level": 1,
+    "hypertension": false,
+    "gestational_diabetes": false,
+    "placenta_previa": false,
+    "pre_eclampsia": false,
+    "low_impact_pref": true,
+    "water_access": true,
+    "back_pain": true
+  }'
+
+## 8. Edit the rules (optional)
+File location:
+rules.yml
+- You must restart the API after modifying this file.
+
+## 9. Retrain the model (only if needed)
+python train.py
+
+## 10. Stop the server
+Press CTRL + C
