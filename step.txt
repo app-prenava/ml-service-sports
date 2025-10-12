@@ -1,6 +1,6 @@
-#if mac
+#if mac //1
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate 
 
 #if Windows
 python -m venv venv
@@ -12,13 +12,13 @@ pip install -r requirements.txt
 # Train the model
 python train_risk.py
 
-# Run API
-uvicorn app:app --host 0.0.0.0 --port 8080
+# Run API //2
+uvicorn app:app --host 0.0.0.0 --port 8085
 
 # Hit Endpoint
-GET http://localhost:8080/healthz
+GET http://localhost:8085/healthz
 
-curl -X POST http://localhost:8080/predict \
+curl -X POST http://localhost:8085/predict \
   -H "Content-Type: application/json" \
   -d '{
     "age": 28,

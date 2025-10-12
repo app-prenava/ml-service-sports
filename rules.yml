@@ -1,18 +1,40 @@
+high_risk_rules:
+  - condition: "risk_high > 0.85"
+    ban:
+      - padel
+      - strength_light_resistance
+      - elliptical_light
+      - treadmill_walk
+      - light_dance
+      - modified_plank
+
 medical_risk_rules:
   - condition: "placenta_position_restriction == True"
     ban:
-      - jogging
+      - padel
+      - low_impact_aerobic
       - high_impact_aerobic
-      - jump_rope
-      - pilates_prenatal
       - strength_heavy
-
+      - pilates_prenatal
+      - jump_rope
+      - jogging
 
   - condition: "previous_complications == True"
     ban:
-      - high_impact_aerobic
-      - pilates_prenatal
       - running
+      - high_impact_aerobic
+
+  - condition: "preexisting_diabetes == True"
+    ban:
+      - strength_light_resistance
+
+  - condition: "gestational_diabetes == True"
+    ban:
+      - padel
+
+  - condition: "mental_health_issue == True"
+    ban:
+      - light_dance
 
 preference_rules:
   - condition: "low_impact_pref == True"
@@ -20,23 +42,27 @@ preference_rules:
       - prenatal_yoga
       - stretching_gentle
       - pilates_prenatal
-      - swimming
       - pelvic_floor
-
-  - condition: "water_access == False"
-    lower:
-      - swimming
-      - aqua_cycling
 
   - condition: "back_pain == True"
     boost:
       - stretching_gentle
+      - cat_cow_pose
       - prenatal_yoga
       - pelvic_floor
     lower:
       - strength_heavy
       - running
       - jumping
+      
+  - condition: "water_access == False"
+    lower:
+      - swimming
+      - aqua_cycling
+
+  - condition: "gestational_age_weeks >= 14 and gestational_age_weeks <= 27 and bmi < 32 and placenta_position_restriction == False and previous_complications == False and gestational_diabetes == False and preexisting_diabetes == False and back_pain == False and low_impact_pref == False"
+    boost:
+      - padel
 
   - condition: "mental_health_issue == True"
     boost:
