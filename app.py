@@ -80,10 +80,16 @@ class PredictInput(BaseModel):
     back_pain: bool = False
 
 
-def apply_rules(xd, ranked):
-    ctx = xd.copy()
-
+def apply_rules(xd, ranked, risk_map):
     final_list = ranked.copy()
+    ctx = xd.copy()
+    ctx.update(risk_map)
+
+    for rule in rules.get("high_risk_rules", []):
+        cond = rule.get("condition")
+        if cond and eval(cond, {}, ctx):
+            banned = rule.get("ban", [])
+            final_list = [r for r in final_list if r["activity"] not in banned]
 
     for rule in rules.get("medical_risk_rules", []):
         cond = rule.get("condition")
@@ -103,9 +109,10 @@ def apply_rules(xd, ranked):
                 for item in final_list:
                     if item["activity"] == act:
                         item["score"] -= 0.05
-                        
+
     final_list = sorted(final_list, key=lambda x: x["score"], reverse=True)
     return final_list
+
 
 @app.post("/predict")
 def predict(payload: PredictInput):
@@ -161,7 +168,7 @@ def predict(payload: PredictInput):
         )
         ranked.append({"activity": act, "score": round(base_score, 4)})
 
-    final_list = apply_rules(xd, ranked)
+    final_list = apply_rules(xd, ranked, risk_map)
 
     return {
         "model_version": MODEL_VER,
