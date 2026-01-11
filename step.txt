@@ -46,3 +46,11 @@ docker run --rm -p 8080:8080 \
   -v $(pwd)/risk_model.pkl:/app/risk_model.pkl \
   -v $(pwd)/rules.yml:/app/rules.yml \
   ml-service-sports
+
+
+#docker
+docker build -t prenava-ml-sport:latest .
+
+docker images | grep prenava-ml-sport
+
+docker run --rm -p 8080:8080 prenava-ml-sport:latest

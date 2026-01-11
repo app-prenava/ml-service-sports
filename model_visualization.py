@@ -15,9 +15,8 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import train_test_split
 
-# -----------------------------
+
 # 1. Load Model & Dataset
-# -----------------------------
 DATASET_PATH = os.getenv("DATASET_PATH", "data/maternal_health.csv")
 MODEL_PATH   = os.getenv("RISK_MODEL_PATH", "risk_model.pkl")
 SEED = 42
@@ -75,9 +74,8 @@ classes = obj["class_names"]
 y_pred = model.predict(X_test)
 y_proba = model.predict_proba(X_test)
 
-# -----------------------------
 # 2. Confusion Matrix
-# -----------------------------
+
 cm = confusion_matrix(y_test, y_pred, labels=classes)
 plt.figure(figsize=(6, 5))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
@@ -89,9 +87,8 @@ plt.tight_layout()
 plt.savefig("confusion_matrix.png")
 plt.show()
 
-# -----------------------------
 # 3. ROC Curve
-# -----------------------------
+
 # Untuk kasus binary, ambil salah satu class sebagai "positif"
 if len(classes) == 2:
     positive_class = classes[1]
@@ -112,20 +109,15 @@ if len(classes) == 2:
     plt.savefig("roc_curve.png")
     plt.show()
 
-# -----------------------------
 # 4. Coefficient Plot
-# -----------------------------
-# Ambil koefisien dari model logistic regression di dalam pipeline
 clf = model.named_steps["clf"]
 coefs = clf.coef_
 coef_df = pd.DataFrame(coefs, columns=FEATURES)
 
 plt.figure(figsize=(10, 5))
 if coef_df.shape[0] == 1:
-    # Binary classification -> satu baris koefisien
     plt.bar(coef_df.columns, coef_df.iloc[0], alpha=0.7, label="Coefficients")
 else:
-    # Multiclass -> per kelas
     for i, cls in enumerate(classes):
         plt.bar(coef_df.columns, coef_df.iloc[i], alpha=0.6, label=f"Class: {cls}")
 
