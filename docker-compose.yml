@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  ml-service-sports:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prenava-ml-sports
+    restart: always
+    ports:
+      - "8080:8080"
